@@ -1,5 +1,5 @@
-node_modules/**
-reports/**
-testing/**
-.git/**
-build/**
+build/
+coverage/
+node_modules/
+.git/
+testing/

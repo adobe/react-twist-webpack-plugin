@@ -16,7 +16,7 @@
     "@twist/babel-plugin-transform-react": "adobe/babel-plugin-transform-react-twist",
     "@twist/core": "adobe/twist",
     "@twist/react": "adobe/react-twist",
-    "babel-loader": "7.x.x",
+    "babel-loader": "^7.1.2",
     "babel-plugin-fast-async": "^6.1.2",
     "babel-plugin-module-resolver": "^3.0.0",
     "babel-plugin-syntax-jsx": "^6.18.0",
@@ -29,16 +29,16 @@
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
-    "thread-loader": "1.x.x"
+    "thread-loader": "^1.1.2"
   },
   "peerDependencies": {
-    "react": "^16.2.0",
     "webpack": "^3.0.0"
   },
   "devDependencies": {
-    "babel-eslint": "7.2.x",
-    "eslint": "4.3.0",
-    "mocha": "^3.4.2",
+    "babel-eslint": "^7.2.3",
+    "eslint-plugin-babel": "^4.1.2",
+    "eslint": "^4.3.0",
+    "mocha": "^4.0.1",
     "webpack": "^3.0.0"
   }
 }

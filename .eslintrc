@@ -1,6 +1,8 @@
 {
     "parser": "babel-eslint",
-    "plugins": [],
+    "plugins": [
+        "babel"
+    ],
     "env": {
         "browser": true,
         "es6": true,
@@ -38,9 +40,9 @@
 
         // Semantic rules
         "eqeqeq": "error",
-        // "new-cap": "error", // Enable once eslint-plugin-twist knows about this
-        "no-undef": "off", // letting jsx-no-undef to take over
-        "constructor-super": "off", // This doesn't yet understand that @Component extends classes, so get lots of errors
+        "new-cap": [ "error", { "capIsNew": false } ],
+        "no-undef": "error",
+        "constructor-super": "error",
 
         // Code cleanliness
         "no-console": [ "error", { "allow": ["warn", "error"] } ]  // Just prevent console.log
