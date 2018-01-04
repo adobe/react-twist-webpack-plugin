@@ -12,7 +12,7 @@
  */
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const TwistReactWebpackPlugin = require('@twist/react-webpack-plugin');
+const TwistReactWebpackPlugin = require('../index');
 const path = require('path');
 const webpack = require('webpack');
 

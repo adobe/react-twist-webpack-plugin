@@ -10,7 +10,6 @@
   "author": "",
   "dependencies": {
     "@twist/react": "adobe/react-twist",
-    "@twist/react-webpack-plugin": "file:..",
     "html-webpack-plugin": "^2.30.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
