@@ -1,0 +1,8 @@
+.DS_Store
+.publish/
+build/
+build_chrome/
+node_modules
+node_modules/
+npm-debug.log
+testing/
