@@ -11,7 +11,7 @@
  *
  */
 
-const TwistConfiguration = require('@twist/core/babel/TwistConfiguration');
+const TwistConfiguration = require('@twist/configuration');
 const convertRuleToCondition = require('./convertRuleToCondition');
 const webpack = require('webpack');
 
@@ -37,6 +37,9 @@ module.exports = class ReactWebpackPlugin extends TwistConfiguration {
 
     constructor() {
         super('webpack', OPTIONS);
+    }
+
+    _init(contextName, options) {
 
         /**
          * The local webpack instance.
@@ -53,13 +56,12 @@ module.exports = class ReactWebpackPlugin extends TwistConfiguration {
         this._babelLoaderTest = /\.jsx$/;
         this._babelLoaderExcludes = [];
 
+        super._init(contextName, options);
+
         // React Babel Plugins (some people use babel-preset-react instead):
         this.addBabelPlugin('syntax-jsx');
         this.addBabelPlugin('transform-react-jsx');
         this.addBabelPlugin('transform-react-display-name');
-        // Twist Libraries:
-        this.addLibrary('@twist/core');
-        this.addLibrary('@twist/react');
     }
 
     /**
