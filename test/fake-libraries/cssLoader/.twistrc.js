@@ -11,10 +11,13 @@
  *
  */
 
-module.exports = (config, options = {}) => {
-    config.addGlobalWebpackRule({
-        include: options.include,
-        test: /\.css$/,
-        loader: 'css-loader'
-    });
+module.exports = {
+    context: {
+        webpack: {
+            webpackRules: [{
+                test: /\.css$/,
+                loader: 'css-loader'
+            }]
+        }
+    }
 };

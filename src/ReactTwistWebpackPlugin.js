@@ -15,12 +15,17 @@ const TwistConfiguration = require('@twist/configuration');
 const convertRuleToCondition = require('./convertRuleToCondition');
 const webpack = require('webpack');
 
-const OPTIONS = {
+const DEFAULT_OPTIONS = {
     includeBabelRuntime: true,
     targets: { browsers: [ 'last 2 versions', 'ie >= 10' ] },
     transformImports: false,
     useBabelModuleResolver: false,
     twistPlugin: '@twist/babel-plugin-transform-react',
+
+    // Webpack-specific options:
+    babelLoaderTest: /\.jsx$/,
+    useThreadLoader: true,
+    useSourceMaps: true,
 };
 
 /**
@@ -35,8 +40,8 @@ const OPTIONS = {
  */
 module.exports = class ReactWebpackPlugin extends TwistConfiguration {
 
-    constructor() {
-        super('webpack', OPTIONS);
+    constructor(options) {
+        super('webpack', Object.assign({}, DEFAULT_OPTIONS, options));
     }
 
     _init(contextName, options) {
@@ -47,13 +52,9 @@ module.exports = class ReactWebpackPlugin extends TwistConfiguration {
          */
         this.webpack = webpack;
 
-        this._addBabelLoader = true;
-        this._addThreadLoader = true;
-        this._useSourceMaps = true;
         this._webpackPlugins = [];
         this._nonLibraryRuleExcludes = [];
         this._webpackRules = [];
-        this._babelLoaderTest = /\.jsx$/;
         this._babelLoaderExcludes = [];
 
         super._init(contextName, options);
@@ -65,45 +66,25 @@ module.exports = class ReactWebpackPlugin extends TwistConfiguration {
     }
 
     /**
-     * If you have included your own ".jsx" rule in your Webpack configuration,
-     * call `withoutBabelLoader()` and ReactWebpackPlugin will not attempt to add its own rule.
-     * @return {ReactWebpackPlugin}
+     * Adds a .twistrc configuration to the Twist configuration
+     * This shouldn't be called directly - it's called as a consequence of _libraryLoader.load().
+     *
+     * @param {Object} config The configuration from the .twistrc file
      */
-    withoutBabelLoader() {
-        this._addBabelLoader = false;
-        return this;
-    }
+    mergeConfig(config = {}) {
+        super.mergeConfig(config);
 
-    /**
-     * By default, twist-webpack will include the thread-loader to do multi-threaded compilation, which improves
-     * build time. Call `withoutThreadLoader()` if you want to disable this.
-     * @return {ReactWebpackPlugin}
-     */
-    withoutThreadLoader() {
-        this._addThreadLoader = false;
-        return this;
-    }
+        // Babel loader excludes
+        this._forEachConfig(config.babelLoaderExcludes, this.addBabelLoaderExclude.bind(this));
 
-    /**
-     * By default, twist-webpack will include source maps. Call `withoutSourceMaps()` if you want to disable this.
-     * @return {ReactWebpackPlugin}
-     */
-    withoutSourceMaps() {
-        this._useSourceMaps = false;
-        return this;
-    }
+        // Webpack plugins
+        this._forEachConfig(config.webpackPlugins, this.addWebpackPlugin.bind(this));
 
-    /**
-     * Set the RegExp used to determine which files will be parsed with babel-loader.
-     * @param {RegExp} regexp
-     * @return {ReactWebpackPlugin}
-     */
-    setBabelLoaderTest(regexp) {
-        if (!(regexp instanceof RegExp)) {
-            throw new Error('setBabelLoaderTest() expects a RegExp instance; got ' + regexp);
-        }
-        this._babelLoaderTest = regexp;
-        return this;
+        // Webpack rules
+        this._forEachConfig(config.webpackRules, this.addWebpackRule.bind(this));
+
+        // Global webpack rules
+        this._forEachConfig(config.globalWebpackRules, this.addGlobalWebpackRule.bind(this));
     }
 
     /**
@@ -203,9 +184,9 @@ module.exports = class ReactWebpackPlugin extends TwistConfiguration {
      * @param {object} [options]
      */
     addBabelPlugin(plugin, options) {
-        if (typeof plugin !== 'string' && this._addThreadLoader) {
-            console.warn('In order to use the thread-loader, all Babel plugins must be passed in as strings. Change `addLoader(require(xxx))` to `addBabelPlugin(xxx)` if you want to enable multi-threaded compilation');
-            this._addThreadLoader = false;
+        if (typeof plugin !== 'string' && this._options.useThreadLoader) {
+            console.warn('In order to use the thread-loader, all Babel plugins must be passed in as strings. Change `require(xxx)` to `xxx` if you want to enable multi-threaded compilation');
+            this._options.useThreadLoader = false;
         }
         return super.addBabelPlugin(plugin, options);
     }
@@ -224,23 +205,23 @@ module.exports = class ReactWebpackPlugin extends TwistConfiguration {
         options.module = options.module || {};
         options.module.rules = options.module.rules || [];
 
-        if (this._addBabelLoader) {
+        if (this._options.babelLoaderTest) {
             let babelOptions = Object.assign(this.babelOptions, {
-                sourceMaps: this._useSourceMaps
+                sourceMaps: this._options.useSourceMaps
             });
             let use = [ {
                 loader: 'babel-loader',
                 options: babelOptions
             } ];
 
-            if (this._addThreadLoader) {
+            if (this._options.useThreadLoader) {
                 use.unshift({
                     loader: 'thread-loader'
                 });
             }
 
             options.module.rules.push({
-                test: this._babelLoaderTest,
+                test: this._options.babelLoaderTest,
                 use,
                 exclude: this._babelLoaderExcludes
             });

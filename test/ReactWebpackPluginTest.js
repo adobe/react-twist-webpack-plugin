@@ -13,7 +13,7 @@
 
 /* global describe it */
 
-const ReactWebpackPlugin = require('../index');
+const ReactTwistWebpackPlugin = require('../src/ReactTwistWebpackPlugin');
 const assert = require('assert');
 const webpack = require('webpack');
 const path = require('path');
@@ -22,7 +22,7 @@ const path = require('path');
 describe('ReactWebpackPlugin', () => {
 
     it('instantiates TwistConfiguration with the proper options.', () => {
-        const plugin = new ReactWebpackPlugin();
+        const plugin = new ReactTwistWebpackPlugin({ root: null });
         assert.equal(plugin.getOption('includeBabelRuntime'), true);
         assert.equal(plugin.getOption('transformImports'), false);
         assert(plugin.getOption('targets').browsers);
@@ -30,31 +30,30 @@ describe('ReactWebpackPlugin', () => {
     });
 
     it('does not allow addWebpackPlugin outside of a library', () => {
-        const plugin = new ReactWebpackPlugin();
+        const plugin = new ReactTwistWebpackPlugin({ root: null });
         assert.throws(() => {
             plugin.addWebpackPlugin({});
         });
     });
 
     it('does not allow addWebpackRule outside of a library', () => {
-        const plugin = new ReactWebpackPlugin();
+        const plugin = new ReactTwistWebpackPlugin({ root: null });
         assert.throws(() => {
             plugin.addWebpackRule({});
         });
     });
 
     it('adds other webpack plugins if desired', () => {
-        const plugin = new ReactWebpackPlugin();
+        const plugin = new ReactTwistWebpackPlugin({ root: path.join(__dirname, './fake-libraries/addedWebpackPlugin') });
         const compiler = webpack({ entry: 'main.js' });
 
-        plugin.addLibrary(path.join(__dirname, './fake-libraries/addedWebpackPlugin'));
         assert(!compiler.addedWebpackPlugin);
         plugin.apply(compiler);
         assert(compiler.addedWebpackPlugin);
     });
 
     it('allows users to override Twist aliases', () => {
-        const plugin = new ReactWebpackPlugin();
+        const plugin = new ReactTwistWebpackPlugin({ root: null });
         const compiler = webpack({
             entry: 'main.js',
             resolve: {
@@ -68,7 +67,7 @@ describe('ReactWebpackPlugin', () => {
     });
 
     it('applies a .jsx rule with babel-loader and TwistConfiguration’s plugins', () => {
-        const plugin = new ReactWebpackPlugin();
+        const plugin = new ReactTwistWebpackPlugin({ root: null });
         const compiler = webpack({ entry: 'main.js' });
         plugin.apply(compiler);
         assert.equal(compiler.options.module.rules.length, 1);
@@ -81,8 +80,8 @@ describe('ReactWebpackPlugin', () => {
     });
 
     it('allows you to override the babel-loader test regexp', () => {
-        const plugin = new ReactWebpackPlugin()
-            .setBabelLoaderTest(/\.foobar$/);
+        const plugin = new ReactTwistWebpackPlugin({ root: null })
+            .setOption('babelLoaderTest', /\.foobar$/);
         const compiler = webpack({ entry: 'main.js' });
         plugin.apply(compiler);
         assert.equal(compiler.options.module.rules.length, 1);
@@ -97,18 +96,17 @@ describe('ReactWebpackPlugin', () => {
 
     it('throws if you pass a string to setBabelLoaderTest()', () => {
         assert.throws(() => {
-            new ReactWebpackPlugin().setBabelLoaderTest('.foo');
+            new ReactTwistWebpackPlugin({ root: null }).setBabelLoaderTest('.foo');
         });
     });
 
     it('allows libraries to add custom rules to the config, scoped to their path', () => {
         const compiler = webpack({ entry: 'main.js' });
-        const plugin = new ReactWebpackPlugin();
-        plugin.addLibrary(path.join(__dirname, './fake-libraries/cssLoader'));
+        const plugin = new ReactTwistWebpackPlugin({ root: path.join(__dirname, './fake-libraries/cssLoader') });
         plugin.apply(compiler);
         assert.equal(compiler.options.module.rules.length, 2);
         assert.deepEqual(compiler.options.module.rules[1], {
-            include: path.normalize(path.join(__dirname, '..')),
+            include: path.normalize(path.join(__dirname, './fake-libraries/cssLoader')),
             rules: [
                 { test: /\.css$/, loader: 'css-loader' }
             ]
@@ -124,13 +122,12 @@ describe('ReactWebpackPlugin', () => {
                 ]
             }
         });
-        const plugin = new ReactWebpackPlugin();
-        plugin.addLibrary(path.join(__dirname, './fake-libraries/cssLoader'));
+        const plugin = new ReactTwistWebpackPlugin({ root: path.join(__dirname, './fake-libraries/cssLoader') });
         plugin.apply(compiler);
         assert.equal(compiler.options.module.rules.length, 3);
 
         const myRule = compiler.options.module.rules[0];
-        assert.deepEqual(myRule.exclude, [ { and: [ path.dirname(__dirname), { test: /\.css$/ } ] } ]);
+        assert.deepEqual(myRule.exclude, [ { and: [ path.join(__dirname, './fake-libraries/cssLoader'), { test: /\.css$/ } ] } ]);
         assert.deepEqual(myRule.loader, 'less-loader');
     });
 
@@ -143,7 +140,7 @@ describe('ReactWebpackPlugin', () => {
                 ]
             }
         });
-        const plugin = new ReactWebpackPlugin();
+        const plugin = new ReactTwistWebpackPlugin({ root: null });
         plugin.addLibrary(path.join(__dirname, './fake-libraries/globalCssLoader'), { include: '/' });
         plugin.apply(compiler);
         assert.equal(compiler.options.module.rules.length, 3);
@@ -154,7 +151,7 @@ describe('ReactWebpackPlugin', () => {
     });
 
     it('addGlobalWebpackRule() requires an include property', () => {
-        const plugin = new ReactWebpackPlugin();
+        const plugin = new ReactTwistWebpackPlugin({ root: null });
         assert.throws(() => {
             plugin.addLibrary(path.join(__dirname, './fake-libraries/globalCssLoader'));
         }, /`include` property/);
@@ -162,15 +159,14 @@ describe('ReactWebpackPlugin', () => {
 
     it('allows libraries to add a babel-loader exclude pattern', () => {
         const compiler = webpack({ entry: 'main.js' });
-        const plugin = new ReactWebpackPlugin();
-        plugin.addLibrary(path.join(__dirname, './fake-libraries/exclude'));
+        const plugin = new ReactTwistWebpackPlugin({ root: path.join(__dirname, './fake-libraries/exclude') });
         plugin.apply(compiler);
         assert.deepEqual(compiler.options.module.rules[0].exclude[0], /\.js/);
     });
 
     it('does not add babel-loader if you don’t want it', () => {
-        const plugin = new ReactWebpackPlugin();
-        plugin.withoutBabelLoader();
+        const plugin = new ReactTwistWebpackPlugin({ root: null });
+        plugin.setOption('babelLoaderTest', null);
 
         const compiler = webpack({
             entry: 'main.js',
@@ -182,8 +178,8 @@ describe('ReactWebpackPlugin', () => {
     });
 
     it('does not add the thread-loader if you don’t want it', () => {
-        const plugin = new ReactWebpackPlugin();
-        plugin.withoutThreadLoader();
+        const plugin = new ReactTwistWebpackPlugin({ root: null });
+        plugin.setOption('useThreadLoader', false);
 
         const compiler = webpack({ entry: 'main.js' });
         plugin.apply(compiler);
@@ -197,7 +193,7 @@ describe('ReactWebpackPlugin', () => {
     });
 
     it('enables source maps by default', () => {
-        const plugin = new ReactWebpackPlugin();
+        const plugin = new ReactTwistWebpackPlugin({ root: null });
 
         const compiler = webpack({ entry: 'main.js' });
         plugin.apply(compiler);
@@ -208,8 +204,8 @@ describe('ReactWebpackPlugin', () => {
     });
 
     it('does not enable source maps if you don’t want it', () => {
-        const plugin = new ReactWebpackPlugin();
-        plugin.withoutSourceMaps();
+        const plugin = new ReactTwistWebpackPlugin({ root: null });
+        plugin.setOption('useSourceMaps', false);
 
         const compiler = webpack({ entry: 'main.js' });
         plugin.apply(compiler);

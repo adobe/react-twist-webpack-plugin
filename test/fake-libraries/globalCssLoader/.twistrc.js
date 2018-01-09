@@ -11,10 +11,16 @@
  *
  */
 
-module.exports = (config) => {
-    config.addWebpackPlugin({
-        apply(compiler) {
-            compiler.addedWebpackPlugin = true;
+module.exports = function (options) {
+    return {
+        context: {
+            webpack: {
+                globalWebpackRules: [{
+                    include: options.include,
+                    test: /\.css$/,
+                    loader: 'css-loader'
+                }]
+            }
         }
-    });
+    };
 };

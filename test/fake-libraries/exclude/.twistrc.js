@@ -11,6 +11,12 @@
  *
  */
 
-module.exports = (config) => {
-    config.addBabelLoaderExclude(/\.js/);
+module.exports = {
+    context: {
+        webpack: {
+            babelLoaderExcludes: [
+                /\.js/
+            ]
+        }
+    }
 };
