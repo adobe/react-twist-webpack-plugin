@@ -12,7 +12,7 @@
  */
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const TwistReactWebpackPlugin = require('../index');
+const ReactTwistWebpackPlugin = require('../src/ReactTwistWebpackPlugin');
 const path = require('path');
 const webpack = require('webpack');
 
@@ -35,6 +35,6 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({ title: 'sample-project' }),
         new webpack.ProvidePlugin({ React: 'react' }),
-        new TwistReactWebpackPlugin(),
+        new ReactTwistWebpackPlugin(),
     ]
 };

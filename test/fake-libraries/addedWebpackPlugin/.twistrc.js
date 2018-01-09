@@ -11,9 +11,14 @@
  *
  */
 
-module.exports = (config) => {
-    config.addWebpackRule({
-        test: /\.css$/,
-        loader: 'css-loader'
-    });
+module.exports = {
+    context: {
+        webpack: {
+            webpackPlugins: [{
+                apply(compiler) {
+                    compiler.addedWebpackPlugin = true;
+                }
+            }]
+        }
+    }
 };
