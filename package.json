@@ -10,7 +10,9 @@
     "test": "mocha",
     "watch": "mocha --watch",
     "linter": "eslint --ext .js,.jsx .",
-    "linter:fix": "eslint --ext .js,.jsx . --fix"
+    "linter:fix": "eslint --ext .js,.jsx . --fix",
+    "preversion": "npm run linter && npm run test",
+    "postversion": "git push && git push --tags"
   },
   "dependencies": {
     "@twist/babel-plugin-transform-react": "0.1.0",
@@ -32,5 +34,8 @@
     "eslint-plugin-babel": "4.1.2",
     "mocha": "^4.0.1",
     "webpack": "^3.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
