@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@twist/babel-plugin-transform-react@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@twist/babel-plugin-transform-react/-/babel-plugin-transform-react-0.1.0.tgz#2f0255e249b4ee362f849e99cd6a035ae58eb844"
+"@twist/babel-plugin-transform-react@0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@twist/babel-plugin-transform-react/-/babel-plugin-transform-react-0.1.1.tgz#2d74eafff63e982d731942f1732a21e323de3bdb"
   dependencies:
     "@twist/babel-plugin-transform" "0.1.0"
     babel-core "^6.26.0"
