@@ -1,6 +1,6 @@
 {
   "name": "@twist/react-webpack-plugin",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "author": "Adobe Systems Inc.",
   "description": "Configures the Twist JavaScript framework with React and Webpack",
   "repository": "https://github.com/adobe/react-twist-webpack-plugin",
@@ -13,20 +13,20 @@
     "linter:fix": "eslint --ext .js,.jsx . --fix"
   },
   "dependencies": {
-    "@twist/babel-plugin-transform-react": "adobe/babel-plugin-transform-react-twist",
-    "@twist/configuration": "adobe/twist-configuration",
+    "@twist/babel-plugin-transform-react": "0.1.0",
+    "@twist/configuration": "0.1.0",
     "babel-loader": "^7.1.2",
     "thread-loader": "^1.1.2"
   },
   "peerDependencies": {
-    "@twist/core": "adobe/twist",
-    "@twist/react": "adobe/react-twist",
+    "@twist/core": "^0.1.0",
+    "@twist/react": "^0.1.0",
     "webpack": "^3.0.0"
   },
   "devDependencies": {
-    "@twist/core": "adobe/twist",
-    "@twist/eslint-plugin-core": "adobe/eslint-plugin-twist",
-    "@twist/react": "adobe/react-twist",
+    "@twist/core": "^0.1.0",
+    "@twist/eslint-plugin-core": "^0.1.0",
+    "@twist/react": "^0.1.0",
     "babel-eslint": "7.2.3",
     "eslint": "4.3.0",
     "eslint-plugin-babel": "4.1.2",
