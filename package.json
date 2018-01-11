@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@twist/core": "^0.1.0",
-    "@twist/eslint-plugin-core": "^0.1.0",
+    "@twist/eslint-plugin-core": "^0.1.2",
     "@twist/react": "^0.1.0",
     "babel-eslint": "7.2.3",
     "eslint": "4.3.0",
