@@ -1,6 +1,6 @@
 # Twist Webpack+React Build System (@twist/react-webpack-plugin)
 
-The @twist/react-webpack-plugin module provides a Webpack plugin that allows you to easily package Twist/React applications using Webpack.
+The `@twist/react-webpack-plugin` module provides a Webpack plugin that allows you to easily package React-Twist applications using Webpack.
 
 You can use Twist without Webpack -- Twist is compatible with any build system that supports Babel -- but if you're just getting started, we'd recommend starting with this.
 
