@@ -1,6 +1,6 @@
 {
   "name": "@twist/react-webpack-plugin",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Adobe Systems Inc.",
   "description": "Configures the Twist JavaScript framework with React and Webpack",
   "repository": "https://github.com/adobe/react-twist-webpack-plugin",
