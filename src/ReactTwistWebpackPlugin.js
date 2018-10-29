@@ -23,7 +23,7 @@ const DEFAULT_OPTIONS = {
     twistPlugin: '@twist/babel-plugin-transform-react',
 
     // Webpack-specific options:
-    babelLoaderTest: /\.jsx$/,
+    babelLoaderTest: /\.((tsx?)|(jsx))$/,
     useThreadLoader: true,
     useSourceMaps: true,
 };
