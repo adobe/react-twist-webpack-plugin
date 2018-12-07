@@ -1,6 +1,6 @@
 # Webpack Plugin for React-Twist
 
-[![Build Status](https://travis-ci.org/adobe/react-twist-webpack-plugin.svg?branch=master)](https://travis-ci.org/adobe/react-twist-webpack-plugin)
+[![Build Status](https://travis-ci.org/adobe/react-twist-webpack-plugin.svg?branch=master)](https://travis-ci.org/adobe/react-twist-webpack-plugin) [![Greenkeeper badge](https://badges.greenkeeper.io/adobe/react-twist-webpack-plugin.svg)](https://greenkeeper.io/)
 
 This library contains a Webpack plugin for building an application with [React-Twist](https://github.com/adobe/react-twist).
 
